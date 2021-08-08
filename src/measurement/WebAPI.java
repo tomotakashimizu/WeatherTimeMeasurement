@@ -9,10 +9,16 @@ import java.net.URLConnection;
 public class WebAPI {
     private String stringUrl;
     private String param;
+    private String apiKey = "";
 
     WebAPI(String stringUrl, String param) {
         this.stringUrl = stringUrl;
         this.param = param;
+    }
+
+    WebAPI(String stringUrl, String param, String apiKey) {
+        this(stringUrl, param);
+        this.apiKey = apiKey;
     }
     
     public String getStringUrl() {
@@ -27,12 +33,12 @@ public class WebAPI {
     public void setParam(String param) {
         this.param = param;
     }
-
-    public String createJsonData() {
+    
+    public String createJsonString() {
         String jsonData = "empty";
         URL url;
         try {
-            String completeStringUrl = this.stringUrl + this.param;
+            String completeStringUrl = this.stringUrl + this.param + "&appid=" + this.apiKey;
             url = new URL(completeStringUrl);
             URLConnection urlConnection;
             urlConnection = url.openConnection();
