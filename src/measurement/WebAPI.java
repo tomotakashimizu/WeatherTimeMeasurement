@@ -9,36 +9,21 @@ import java.net.URLConnection;
 public class WebAPI {
     private String stringUrl;
     private String param;
-    private String apiKey = "";
+    private String apiKey;
+    private String lang = "";
 
-    WebAPI(String stringUrl, String param) {
+    WebAPI(String stringUrl, String param, String apiKey, String lang) {
         this.stringUrl = stringUrl;
         this.param = param;
-    }
-
-    WebAPI(String stringUrl, String param, String apiKey) {
-        this(stringUrl, param);
         this.apiKey = apiKey;
-    }
-    
-    public String getStringUrl() {
-        return stringUrl;
-    }
-    public String getParam() {
-        return param;
-    }
-    public void setStringUrl(String stringUrl) {
-        this.stringUrl = stringUrl;
-    }
-    public void setParam(String param) {
-        this.param = param;
+        this.lang = lang;
     }
     
     public String createJsonString() {
         String jsonData = "empty";
         URL url;
         try {
-            String completeStringUrl = this.stringUrl + this.param + "&appid=" + this.apiKey;
+            String completeStringUrl = this.stringUrl + this.param + "&appid=" + this.apiKey + this.lang;
             url = new URL(completeStringUrl);
             URLConnection urlConnection;
             urlConnection = url.openConnection();
