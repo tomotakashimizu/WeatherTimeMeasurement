@@ -14,11 +14,7 @@ public class Main {
                                             APIKey.getMyAPIKey(),
                                             "&lang=ja");
         
-        String weatherJsonString = openWeatherAPI.createJsonString();
-        System.out.println("\n=== weatherJsonString ===");
-        System.out.println(weatherJsonString);
-        
-        JSONObject weatherJson = new JSONObject(weatherJsonString);
+        JSONObject weatherJson = openWeatherAPI.createJSON();
         System.out.println("\n=== weatherJson ===");
         System.out.println(weatherJson);
 
