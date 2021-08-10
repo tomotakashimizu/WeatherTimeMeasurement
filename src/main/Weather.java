@@ -8,11 +8,12 @@ public class Weather {
     public int[] pastWeatherTimeList;
     public String[] weatherDescriptionList;
 
-    Weather(String currentTime, String city, String currentWeatherDescription, int currentWeatherTime) {
+    Weather(String currentTime, String city, String currentWeatherDescription, int currentWeatherTime, String[] weatherDescriptionList) {
         this.currentTime = currentTime;
         this.city = city;
         this.currentWeatherDescription = currentWeatherDescription;
         this.currentWeatherTime = currentWeatherTime;
+        this.weatherDescriptionList = weatherDescriptionList;
     }
 
     public String getWeatherDescription() {
