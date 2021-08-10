@@ -2,6 +2,9 @@ package main;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.TimerTask;
 
 import org.json.JSONArray;
@@ -13,6 +16,17 @@ public class TimerTaskCall extends TimerTask {
                                             "?q=tokyo&units=metric",
                                             APIKey.getMyAPIKey(),
                                             "&lang=ja");
+
+    JSONObject weatherJson = openWeatherAPI.createJSON();
+    String weatherInfo = weatherJson.get("weather").toString();
+    JSONArray weatherInfoJsonArray = new JSONArray(weatherInfo);
+
+    String weatherDescription = weatherInfoJsonArray.getJSONObject(0).get("description").toString();
+    String weatherCity = weatherJson.get("name").toString();
+    String targetWeatherDescription = "晴れ";
+    List<String> weatherDescriptionList = new ArrayList<String>(Arrays.asList(weatherDescription));
+
+    Weather weather = new Weather(weatherCity, targetWeatherDescription, weatherDescription, weatherDescriptionList);
 
     @Override
     public void run() {
@@ -39,9 +53,9 @@ public class TimerTaskCall extends TimerTask {
             LocalDateTime nowDateTime = LocalDateTime.now(); 
             DateTimeFormatter javaFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             // 日時情報を指定フォーマットの文字列で取得
-            String nowTime = nowDateTime.format(javaFormat);
+            String currentTime = nowDateTime.format(javaFormat);
             System.out.println("\n=== 現在時刻 ===");
-            System.out.println(nowTime);
+            System.out.println(currentTime);
 
         } catch (Exception ex) {
             ex.printStackTrace();
