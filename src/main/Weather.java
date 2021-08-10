@@ -1,12 +1,12 @@
 package main;
 
 public class Weather {
-    private String currentTime;
-    private String city;
-    private String currentWeatherDescription;
-    private String currentWeatherTime;
-    private String[] pastWeatherTimeList;
-    private String[] weatherDescriptionList;
+    public String currentTime;
+    public String city;
+    public String currentWeatherDescription;
+    public String currentWeatherTime;
+    public String[] pastWeatherTimeList;
+    public String[] weatherDescriptionList;
 
     public String getWeatherDescription() {
         return currentWeatherDescription;
