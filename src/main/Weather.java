@@ -1,18 +1,20 @@
 package main;
 
+import java.util.List;
+
 public class Weather {
     public String currentTime;
     public String city;
+    public String targetWeatherDescription;
     public String currentWeatherDescription;
-    public int currentWeatherTime;
-    public int[] pastWeatherTimeList;
-    public String[] weatherDescriptionList;
+    public int currentWeatherTime = 0;
+    public List<Integer> pastWeatherTimeList;
+    public List<String> weatherDescriptionList;
 
-    Weather(String currentTime, String city, String currentWeatherDescription, int currentWeatherTime, String[] weatherDescriptionList) {
-        this.currentTime = currentTime;
+    Weather(String city, String targetWeatherDescription, String currentWeatherDescription, List<String> weatherDescriptionList) {
         this.city = city;
+        this.targetWeatherDescription = targetWeatherDescription;
         this.currentWeatherDescription = currentWeatherDescription;
-        this.currentWeatherTime = currentWeatherTime;
         this.weatherDescriptionList = weatherDescriptionList;
     }
 
@@ -25,10 +27,10 @@ public class Weather {
     public void setCity(String city) {
         this.city = city;
     }
-    public int[] getPastWeatherTime() {
+    public List<Integer> getPastWeatherTime() {
         return pastWeatherTimeList;
     }
-    public void setPastWeatherTime(int[] pastWeatherTimeList) {
+    public void setPastWeatherTime(List<Integer> pastWeatherTimeList) {
         this.pastWeatherTimeList = pastWeatherTimeList;
     }
     public String getCurrentTime() {
@@ -43,10 +45,10 @@ public class Weather {
     public void setWeatherTime(int currentWeatherTime) {
         this.currentWeatherTime = currentWeatherTime;
     }
-    public String[] getWeatherDescriptionList() {
+    public List<String> getWeatherDescriptionList() {
         return weatherDescriptionList;
     }
-    public void setWeatherDescriptionList(String[] weatherDescriptionList) {
+    public void setWeatherDescriptionList(List<String> weatherDescriptionList) {
         this.weatherDescriptionList = weatherDescriptionList;
     }
     public void setWeatherDescription(String weatherDescription) {
