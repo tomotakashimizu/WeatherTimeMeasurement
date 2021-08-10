@@ -4,9 +4,16 @@ public class Weather {
     public String currentTime;
     public String city;
     public String currentWeatherDescription;
-    public String currentWeatherTime;
-    public String[] pastWeatherTimeList;
+    public int currentWeatherTime;
+    public int[] pastWeatherTimeList;
     public String[] weatherDescriptionList;
+
+    Weather(String currentTime, String city, String currentWeatherDescription, int currentWeatherTime) {
+        this.currentTime = currentTime;
+        this.city = city;
+        this.currentWeatherDescription = currentWeatherDescription;
+        this.currentWeatherTime = currentWeatherTime;
+    }
 
     public String getWeatherDescription() {
         return currentWeatherDescription;
@@ -17,11 +24,11 @@ public class Weather {
     public void setCity(String city) {
         this.city = city;
     }
-    public String[] getPastWeatherTime() {
+    public int[] getPastWeatherTime() {
         return pastWeatherTimeList;
     }
-    public void setPastWeatherTime(String[] pastWeatherTime) {
-        this.pastWeatherTimeList = pastWeatherTime;
+    public void setPastWeatherTime(int[] pastWeatherTimeList) {
+        this.pastWeatherTimeList = pastWeatherTimeList;
     }
     public String getCurrentTime() {
         return currentTime;
@@ -29,11 +36,11 @@ public class Weather {
     public void setCurrentTime(String currentTime) {
         this.currentTime = currentTime;
     }
-    public String getWeatherTime() {
+    public int getWeatherTime() {
         return currentWeatherTime;
     }
-    public void setWeatherTime(String weatherTime) {
-        this.currentWeatherTime = weatherTime;
+    public void setWeatherTime(int currentWeatherTime) {
+        this.currentWeatherTime = currentWeatherTime;
     }
     public String[] getWeatherDescriptionList() {
         return weatherDescriptionList;
