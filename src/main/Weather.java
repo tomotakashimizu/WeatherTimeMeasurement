@@ -18,6 +18,18 @@ public class Weather {
         this.weatherDescriptionList = weatherDescriptionList;
     }
 
+    public void printData() {
+        System.out.println("\n=== Weatherクラスのデータ 開始 ===");
+        System.out.println("現在時刻：" + this.currentTime);
+        System.out.println("都市：" + this.city);
+        System.out.println("計測対象の天気：" + this.targetWeatherDescription);
+        System.out.println("現在の天気：" + this.currentWeatherDescription);
+        System.out.println("現在の天気が継続している時間：" + this.currentWeatherTime);
+        System.out.println("過去の計測対象の天気の時間：" + this.pastWeatherTimeList);
+        System.out.println("プログラムを回している間の天気のリスト：" + this.weatherDescriptionList);
+        System.out.println("=== Weatherクラスのデータ 終了 ===\n");
+    }
+
     public String getWeatherDescription() {
         return currentWeatherDescription;
     }
