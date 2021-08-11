@@ -5,14 +5,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import org.json.JSONObject;
 
 public class WebAPI {
     private String stringUrl;
     private String param;
     private String apiKey;
     private String lang = "";
-    private JSONObject json;
+    private String json;
 
     WebAPI(String stringUrl, String param, String apiKey, String lang) {
         this.stringUrl = stringUrl;
@@ -21,8 +20,8 @@ public class WebAPI {
         this.lang = lang;
     }
 
-    public JSONObject createJSON() {
-        String jsonString = "empty";
+    public String createJSON() {
+        String jsonData = "empty";
         URL url;
         try {
             String completeStringUrl = this.stringUrl + this.param + "&appid=" + this.apiKey + this.lang;
@@ -33,14 +32,13 @@ public class WebAPI {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             String line = bufferedReader.readLine();
             if (line != null) {
-                jsonString = line;
+                jsonData = line;
             }
             bufferedReader.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        JSONObject jsonObject = new JSONObject(jsonString);
-        this.json = jsonObject;
+        this.json = jsonData;
         return this.json;
     }
 
