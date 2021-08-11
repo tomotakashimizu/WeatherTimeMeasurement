@@ -26,7 +26,7 @@ public class TimerTaskCall extends TimerTask {
     String targetWeatherDescription = "晴れ";
     List<String> weatherDescriptionList = new ArrayList<String>(Arrays.asList(weatherDescription));
 
-    Weather weather = new Weather(weatherCity, targetWeatherDescription, weatherDescription, weatherDescriptionList);
+    WeatherValue weather = new WeatherValue(weatherCity, targetWeatherDescription, weatherDescription, weatherDescriptionList);
 
     @Override
     public void run() {
