@@ -2,7 +2,7 @@ package main;
 
 import java.util.List;
 
-public class Weather {
+public class WeatherValue {
     public String currentTime;
     public String city;
     public String targetWeatherDescription;
@@ -11,7 +11,7 @@ public class Weather {
     public List<Integer> pastWeatherTimeList;
     public List<String> weatherDescriptionList;
 
-    Weather(String city, String targetWeatherDescription, String currentWeatherDescription, List<String> weatherDescriptionList) {
+    WeatherValue(String city, String targetWeatherDescription, String currentWeatherDescription, List<String> weatherDescriptionList) {
         this.city = city;
         this.targetWeatherDescription = targetWeatherDescription;
         this.currentWeatherDescription = currentWeatherDescription;
