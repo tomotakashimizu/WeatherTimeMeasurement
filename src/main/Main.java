@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
         Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
-        postgresTest.createValues("(2, 'B')");
+        postgresTest.createValues("testtable", "(3, 'CC')");
 
         // Timer time = new Timer();
         // System.out.println("実行開始");

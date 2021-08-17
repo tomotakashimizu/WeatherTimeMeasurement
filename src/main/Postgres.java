@@ -22,7 +22,7 @@ public class Postgres {
         this.password = password;
     }
 
-    public void createValues(String values) {
+    public void createValues(String tableName, String values) {
         //接続文字列
         String url = "jdbc:postgresql://127.0.0.1:5432/" + this.dbName;
 
@@ -45,7 +45,7 @@ public class Postgres {
             }
 
             //INSERT文の実行
-            sql = "INSERT INTO testtable VALUES " + values;
+            sql = "INSERT INTO " + tableName + " VALUES " + values;
             stmt.executeUpdate(sql);
             conn.commit();
         }
