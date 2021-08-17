@@ -9,6 +9,8 @@ public class Main {
         Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
         postgresTest.createValues("testtable", "(3, 'CC')");
 
+        postgresTest.createTable("testtable3", "(id integer)");
+
         // Timer time = new Timer();
         // System.out.println("実行開始");
         // // TimerTaskCallを、3秒後に、5秒間隔で実行する
