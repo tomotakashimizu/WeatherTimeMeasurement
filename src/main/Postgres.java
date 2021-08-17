@@ -12,23 +12,22 @@ public class Postgres {
     Statement stmt = null;
     ResultSet rset = null;
 
-    private String dbName;
     private String userName;
     private String password;
+    private String url;
 
     Postgres(String dbName, String userName, String password) {
-        this.dbName = dbName;
         this.userName = userName;
         this.password = password;
+        //接続文字列
+        this.url = "jdbc:postgresql://127.0.0.1:5432/" + dbName;
     }
 
     public void createValues(String tableName, String values) {
-        //接続文字列
-        String url = "jdbc:postgresql://127.0.0.1:5432/" + this.dbName;
-
+        
         try{
             //PostgreSQLへ接続
-            conn = DriverManager.getConnection(url, this.userName, this.password);
+            conn = DriverManager.getConnection(this.url, this.userName, this.password);
 
             //自動コミットOFF
             conn.setAutoCommit(false);
@@ -66,12 +65,10 @@ public class Postgres {
     }
 
     public void createTable(String tableName, String valuesType) {
-        //接続文字列
-        String url = "jdbc:postgresql://127.0.0.1:5432/" + this.dbName;
-
+        
         try{
             //PostgreSQLへ接続
-            conn = DriverManager.getConnection(url, this.userName, this.password);
+            conn = DriverManager.getConnection(this.url, this.userName, this.password);
 
             //自動コミットOFF
             conn.setAutoCommit(false);
