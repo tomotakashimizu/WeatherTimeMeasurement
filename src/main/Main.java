@@ -1,6 +1,6 @@
 package main;
 
-// import java.util.Timer;
+import java.util.Timer;
 
 public class Main {
     
@@ -11,10 +11,10 @@ public class Main {
 
         postgresTest.createTable("testtable4", "(id integer)");
 
-        // Timer time = new Timer();
-        // System.out.println("実行開始");
-        // // TimerTaskCallを、3秒後に、5秒間隔で実行する
-        // time.scheduleAtFixedRate(new TimerTaskCall(), 3000, 5000);
+        Timer time = new Timer();
+        System.out.println("実行開始");
+        // TimerTaskCallを、3秒後に、5秒間隔で実行する
+        time.scheduleAtFixedRate(new TimerTaskCall(), 3000, 5000);
     }
     
 }
