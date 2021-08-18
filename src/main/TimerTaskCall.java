@@ -30,6 +30,9 @@ public class TimerTaskCall extends TimerTask {
 
     WeatherValue weatherValue = new WeatherValue(weatherCity, targetWeatherDescription, weatherDescription, weatherDescriptionList);
 
+    Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
+    int i = 0;
+
     @Override
     public void run() {
         try {
@@ -46,6 +49,10 @@ public class TimerTaskCall extends TimerTask {
             // 現在日時情報を指定フォーマットの文字列で取得
             String currentTime = LocalDateTime.now().format(dateTimeFormat);
             System.out.println("\n=== 現在時刻 ===\n" + currentTime + "\n");
+
+            i += 1;
+            String values = "(" + i + ", '" + weatherCity + "', '" + currentTime + "', '" + weatherDescription + "')";
+            postgresTest.createValues("testtable5", values);
 
         } catch (Exception ex) {
             ex.printStackTrace();
