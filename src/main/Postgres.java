@@ -44,7 +44,7 @@ public class Postgres {
             }
 
             //INSERT文の実行
-            sql = "INSERT INTO " + tableName + " VALUES " + values;
+            sql = "INSERT INTO " + tableName + " VALUES (" + values + ")";
             stmt.executeUpdate(sql);
             conn.commit();
         }
@@ -76,7 +76,7 @@ public class Postgres {
             stmt = conn.createStatement();
 
             //CREATE文の実行
-            String sql = "CREATE TABLE " + tableName + " " + valuesType;
+            String sql = "CREATE TABLE " + tableName + " (" + valuesType + ")";
             stmt.executeUpdate(sql);
             conn.commit();
         }

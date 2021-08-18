@@ -51,8 +51,8 @@ public class TimerTaskCall extends TimerTask {
             System.out.println("\n=== 現在時刻 ===\n" + currentTime + "\n");
 
             i += 1;
-            String values = "(" + i + ", '" + weatherCity + "', '" + currentTime + "', '" + weatherDescription + "')";
-            postgresTest.createValues("testtable5", values);
+            String values = i + ", '" + weatherCity + "', '" + currentTime + "', '" + weatherDescription + "'";
+            postgresTest.createValues("testtable6", values);
 
         } catch (Exception ex) {
             ex.printStackTrace();
