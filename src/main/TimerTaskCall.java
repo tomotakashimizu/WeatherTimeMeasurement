@@ -54,6 +54,36 @@ public class TimerTaskCall extends TimerTask {
             String values = i + ", '" + weatherCity + "', '" + currentTime + "', '" + weatherDescription + "'";
             postgresTest.createValues("testtable6", values);
 
+            // 現在の天気になる前の天気
+            String weatherDescriptionBefore = weatherValue.weatherDescriptionList.get(weatherValue.weatherDescriptionList.size() - 1);
+            // 前の天気も現在の天気も計測対象の天気と異なる場合
+            if (weatherDescriptionBefore != targetWeatherDescription && weatherDescription != targetWeatherDescription) {
+
+            }
+
+            // 前の天気は計測対象の天気以外で、現在の天気は計測対象の天気の場合
+            if (weatherDescriptionBefore != targetWeatherDescription && weatherDescription == targetWeatherDescription) {
+
+            }
+
+            // 前の天気も現在の天気も計測対象の天気の場合
+            if (weatherDescriptionBefore == targetWeatherDescription && weatherDescription != targetWeatherDescription) {
+
+            }
+
+            // 前の天気は計測対象の天気で、現在の天気は計測対象の天気以外の場合
+            if (weatherDescriptionBefore == targetWeatherDescription && weatherDescription != targetWeatherDescription) {
+
+            }
+
+            if (weatherDescription == weatherDescriptionBefore) {
+                // 現在の天気が前の天気と同じ場合
+
+            } else {
+                // 現在の天気が前の天気と異なる場合
+
+            }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
