@@ -24,7 +24,7 @@ public class TimerTaskCall extends TimerTask {
     String weatherJson = openWeatherAPI.createJSON();
     OpenWeatherModel openWeatherModel = gson.fromJson(weatherJson, OpenWeatherModel.class);
     String weatherCity = openWeatherModel.name;
-    String targetWeatherDescription = "晴れ";
+    String targetWeatherDescription = "薄い雲";
     String weatherDescription = openWeatherModel.weather.get(0).description;
     List<String> weatherDescriptionList = new ArrayList<String>(Arrays.asList(weatherDescription));
 
@@ -50,6 +50,8 @@ public class TimerTaskCall extends TimerTask {
             String currentTime = LocalDateTime.now().format(dateTimeFormat);
             System.out.println("\n=== 現在時刻 ===\n" + currentTime + "\n");
 
+            weatherValue.currentTime = currentTime;
+
             i += 1;
             String values = i + ", '" + weatherCity + "', '" + currentTime + "', '" + weatherDescription + "'";
             postgresTest.createValues("testtable6", values);
@@ -57,32 +59,44 @@ public class TimerTaskCall extends TimerTask {
             // 現在の天気になる前の天気
             String weatherDescriptionBefore = weatherValue.weatherDescriptionList.get(weatherValue.weatherDescriptionList.size() - 1);
             // 前の天気も現在の天気も計測対象の天気と異なる場合
-            if (weatherDescriptionBefore != targetWeatherDescription && weatherDescription != targetWeatherDescription) {
+            if ((weatherDescriptionBefore != targetWeatherDescription) && (weatherDescription != targetWeatherDescription)) {
 
+                if (weatherDescription == weatherDescriptionBefore) {
+                    // 現在の天気が前の天気と同じ場合
+                    weatherValue.currentWeatherTime += 5;
+                } else if (weatherDescription != weatherDescriptionBefore) {
+                    // 現在の天気が前の天気と異なる場合
+                    weatherValue.currentWeatherDescription = weatherDescription;
+                    weatherValue.weatherDescriptionList.add(weatherDescription);
+                }
             }
-
             // 前の天気は計測対象の天気以外で、現在の天気は計測対象の天気の場合
-            if (weatherDescriptionBefore != targetWeatherDescription && weatherDescription == targetWeatherDescription) {
-
+            else if ((weatherDescriptionBefore != targetWeatherDescription) && (weatherDescription == targetWeatherDescription)) {
+                weatherValue.currentWeatherDescription = weatherDescription;
+                weatherValue.currentWeatherTime += 5;
+                weatherValue.weatherDescriptionList.add(weatherDescription);
             }
 
             // 前の天気も現在の天気も計測対象の天気の場合
-            if (weatherDescriptionBefore == targetWeatherDescription && weatherDescription != targetWeatherDescription) {
-
+            else if ((weatherDescriptionBefore == targetWeatherDescription) && (weatherDescription == targetWeatherDescription)) {
+                weatherValue.currentWeatherTime += 5;
             }
 
             // 前の天気は計測対象の天気で、現在の天気は計測対象の天気以外の場合
-            if (weatherDescriptionBefore == targetWeatherDescription && weatherDescription != targetWeatherDescription) {
+            else if ((weatherDescriptionBefore == targetWeatherDescription) && (weatherDescription != targetWeatherDescription)) {
+                weatherValue.pastWeatherTimeList.add(weatherValue.currentWeatherTime);
 
+                if (weatherDescription == weatherDescriptionBefore) {
+                    // 現在の天気が前の天気と同じ場合
+                    weatherValue.currentWeatherTime += 5;
+                } else {
+                    // 現在の天気が前の天気と異なる場合
+                    weatherValue.currentWeatherDescription = weatherDescription;
+                    weatherValue.weatherDescriptionList.add(weatherDescription);
+                }
             }
 
-            if (weatherDescription == weatherDescriptionBefore) {
-                // 現在の天気が前の天気と同じ場合
-
-            } else {
-                // 現在の天気が前の天気と異なる場合
-
-            }
+            weatherValue.printData();
 
         } catch (Exception ex) {
             ex.printStackTrace();
