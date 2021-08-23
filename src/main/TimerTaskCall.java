@@ -24,7 +24,7 @@ public class TimerTaskCall extends TimerTask {
     String weatherJson = openWeatherAPI.createJSON();
     OpenWeatherModel openWeatherModel = gson.fromJson(weatherJson, OpenWeatherModel.class);
     String weatherCity = openWeatherModel.name;
-    String targetWeatherDescription = "薄い雲";
+    String targetWeatherDescription = "曇りがち";
     String weatherDescription = openWeatherModel.weather.get(0).description;
     List<String> weatherDescriptionList = new ArrayList<String>(Arrays.asList(weatherDescription));
 
@@ -56,41 +56,48 @@ public class TimerTaskCall extends TimerTask {
             String values = i + ", '" + weatherCity + "', '" + currentTime + "', '" + weatherDescription + "'";
             postgresTest.createValues("testtable6", values);
 
-            // 現在の天気になる前の天気
+            // 現在の天気になる前の天気(weatherDescriptionListの最後の要素を取得)
             String weatherDescriptionBefore = weatherValue.weatherDescriptionList.get(weatherValue.weatherDescriptionList.size() - 1);
+
             // 前の天気も現在の天気も計測対象の天気と異なる場合
-            if ((weatherDescriptionBefore != targetWeatherDescription) && (weatherDescription != targetWeatherDescription)) {
-
-                if (weatherDescription == weatherDescriptionBefore) {
-                    // 現在の天気が前の天気と同じ場合
-                    weatherValue.currentWeatherTime += 5;
-                } else if (weatherDescription != weatherDescriptionBefore) {
-                    // 現在の天気が前の天気と異なる場合
-                    weatherValue.currentWeatherDescription = weatherDescription;
-                    weatherValue.weatherDescriptionList.add(weatherDescription);
-                }
-            }
-            // 前の天気は計測対象の天気以外で、現在の天気は計測対象の天気の場合
-            else if ((weatherDescriptionBefore != targetWeatherDescription) && (weatherDescription == targetWeatherDescription)) {
-                weatherValue.currentWeatherDescription = weatherDescription;
-                weatherValue.currentWeatherTime += 5;
-                weatherValue.weatherDescriptionList.add(weatherDescription);
-            }
-
-            // 前の天気も現在の天気も計測対象の天気の場合
-            else if ((weatherDescriptionBefore == targetWeatherDescription) && (weatherDescription == targetWeatherDescription)) {
-                weatherValue.currentWeatherTime += 5;
-            }
-
-            // 前の天気は計測対象の天気で、現在の天気は計測対象の天気以外の場合
-            else if ((weatherDescriptionBefore == targetWeatherDescription) && (weatherDescription != targetWeatherDescription)) {
-                weatherValue.pastWeatherTimeList.add(weatherValue.currentWeatherTime);
-
-                if (weatherDescription == weatherDescriptionBefore) {
+            if (!(weatherDescriptionBefore.equals(targetWeatherDescription)) && !(weatherDescription.equals(targetWeatherDescription))) {
+                if (weatherDescription.equals(weatherDescriptionBefore)) {
                     // 現在の天気が前の天気と同じ場合
                     weatherValue.currentWeatherTime += 5;
                 } else {
                     // 現在の天気が前の天気と異なる場合
+                    weatherValue.currentWeatherTime = 5;
+                    weatherValue.currentWeatherDescription = weatherDescription;
+                    weatherValue.weatherDescriptionList.add(weatherDescription);
+                }
+            }
+            
+            // 前の天気は計測対象の天気以外で、現在の天気は計測対象の天気の場合
+            else if (!(weatherDescriptionBefore.equals(targetWeatherDescription)) && (weatherDescription.equals(targetWeatherDescription))) {
+                weatherValue.currentWeatherDescription = weatherDescription;
+                weatherValue.currentWeatherTime = 5;
+                weatherValue.weatherDescriptionList.add(weatherDescription);
+            }
+
+            // 前の天気も現在の天気も計測対象の天気の場合
+            else if ((weatherDescriptionBefore.equals(targetWeatherDescription)) && (weatherDescription.equals(targetWeatherDescription))) {
+                weatherValue.currentWeatherTime += 5;
+            }
+
+            // 前の天気は計測対象の天気で、現在の天気は計測対象の天気以外の場合
+            else if ((weatherDescriptionBefore.equals(targetWeatherDescription)) && !(weatherDescription.equals(targetWeatherDescription))) {
+                if (weatherValue.pastWeatherTimeList == null) {
+                    weatherValue.pastWeatherTimeList = new ArrayList<Integer>(Arrays.asList(weatherValue.currentWeatherTime));
+                } else {
+                    weatherValue.pastWeatherTimeList.add(weatherValue.currentWeatherTime);
+                }
+
+                if (weatherDescription.equals(weatherDescriptionBefore)) {
+                    // 現在の天気が前の天気と同じ場合
+                    weatherValue.currentWeatherTime += 5;
+                } else {
+                    // 現在の天気が前の天気と異なる場合
+                    weatherValue.currentWeatherTime = 5;
                     weatherValue.currentWeatherDescription = weatherDescription;
                     weatherValue.weatherDescriptionList.add(weatherDescription);
                 }
@@ -101,7 +108,5 @@ public class TimerTaskCall extends TimerTask {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        
     }
-    
 }
