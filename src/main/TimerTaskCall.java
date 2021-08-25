@@ -74,11 +74,13 @@ public class TimerTaskCall extends TimerTask {
             else if (!(weatherBefore.equals(targetWeather)) && currentWeather.equals(targetWeather)) {
                 weatherValue.currentWeatherTime = 5;
                 weatherValue.pastWeatherList.add(currentWeather);
+                weatherValue.totalTargetWeatherTime += 5;
             }
 
             // 前の天気も現在の天気も計測対象の天気の場合
             else if (weatherBefore.equals(targetWeather) && currentWeather.equals(targetWeather)) {
                 weatherValue.currentWeatherTime += 5;
+                weatherValue.totalTargetWeatherTime += 5;
             }
 
             // 前の天気は計測対象の天気で、現在の天気は計測対象の天気以外の場合
