@@ -96,4 +96,38 @@ public class Postgres {
         }
     }
 
+    public void selectValues(String sql) {
+
+        try{
+            //PostgreSQLへ接続
+            conn = DriverManager.getConnection(this.url, this.userName, this.password);
+
+            //自動コミットOFF
+            conn.setAutoCommit(false);
+
+            //SELECT文の実行
+            stmt = conn.createStatement();
+            rset = stmt.executeQuery(sql);
+
+            //SELECT結果の受け取り
+            while(rset.next()){
+                String col = rset.getString("description");
+                System.out.println(col);
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                if(rset != null)rset.close();
+                if(stmt != null)stmt.close();
+                if(conn != null)conn.close();
+            }
+            catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
