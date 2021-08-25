@@ -53,6 +53,7 @@ public class TimerTaskCall extends TimerTask {
 
             weatherValue.currentTime = currentTime;
             weatherValue.currentWeather = currentWeather;
+            weatherValue.measuringTime += 5;
 
             // 現在の天気になる前の天気(weatherDescriptionListの最後の要素を取得)
             String weatherBefore = weatherValue.pastWeatherList.get(weatherValue.pastWeatherList.size() - 1);
