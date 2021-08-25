@@ -57,7 +57,7 @@ public class TimerTaskCall extends TimerTask {
             postgresTest.createValues("testtable6", values);
 
             // 現在の天気になる前の天気(weatherDescriptionListの最後の要素を取得)
-            String weatherDescriptionBefore = weatherValue.weatherDescriptionList.get(weatherValue.weatherDescriptionList.size() - 1);
+            String weatherDescriptionBefore = weatherValue.pastWeatherList.get(weatherValue.pastWeatherList.size() - 1);
 
             // 前の天気も現在の天気も計測対象の天気と異なる場合
             if (!(weatherDescriptionBefore.equals(targetWeatherDescription)) && !(weatherDescription.equals(targetWeatherDescription))) {
@@ -67,16 +67,16 @@ public class TimerTaskCall extends TimerTask {
                 } else {
                     // 現在の天気が前の天気と異なる場合
                     weatherValue.currentWeatherTime = 5;
-                    weatherValue.currentWeatherDescription = weatherDescription;
-                    weatherValue.weatherDescriptionList.add(weatherDescription);
+                    weatherValue.currentWeather = weatherDescription;
+                    weatherValue.pastWeatherList.add(weatherDescription);
                 }
             }
             
             // 前の天気は計測対象の天気以外で、現在の天気は計測対象の天気の場合
             else if (!(weatherDescriptionBefore.equals(targetWeatherDescription)) && (weatherDescription.equals(targetWeatherDescription))) {
-                weatherValue.currentWeatherDescription = weatherDescription;
+                weatherValue.currentWeather = weatherDescription;
                 weatherValue.currentWeatherTime = 5;
-                weatherValue.weatherDescriptionList.add(weatherDescription);
+                weatherValue.pastWeatherList.add(weatherDescription);
             }
 
             // 前の天気も現在の天気も計測対象の天気の場合
@@ -86,10 +86,10 @@ public class TimerTaskCall extends TimerTask {
 
             // 前の天気は計測対象の天気で、現在の天気は計測対象の天気以外の場合
             else if ((weatherDescriptionBefore.equals(targetWeatherDescription)) && !(weatherDescription.equals(targetWeatherDescription))) {
-                if (weatherValue.pastWeatherTimeList == null) {
-                    weatherValue.pastWeatherTimeList = new ArrayList<Integer>(Arrays.asList(weatherValue.currentWeatherTime));
+                if (weatherValue.targetWeatherTimeList == null) {
+                    weatherValue.targetWeatherTimeList = new ArrayList<Integer>(Arrays.asList(weatherValue.currentWeatherTime));
                 } else {
-                    weatherValue.pastWeatherTimeList.add(weatherValue.currentWeatherTime);
+                    weatherValue.targetWeatherTimeList.add(weatherValue.currentWeatherTime);
                 }
 
                 if (weatherDescription.equals(weatherDescriptionBefore)) {
@@ -98,8 +98,8 @@ public class TimerTaskCall extends TimerTask {
                 } else {
                     // 現在の天気が前の天気と異なる場合
                     weatherValue.currentWeatherTime = 5;
-                    weatherValue.currentWeatherDescription = weatherDescription;
-                    weatherValue.weatherDescriptionList.add(weatherDescription);
+                    weatherValue.currentWeather = weatherDescription;
+                    weatherValue.pastWeatherList.add(weatherDescription);
                 }
             }
 
