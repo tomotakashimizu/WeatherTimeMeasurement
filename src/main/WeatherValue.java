@@ -12,7 +12,7 @@ public class WeatherValue {
     public List<String> pastWeatherList;
     public List<Integer> targetWeatherTimeList;
     public int totalTargetWeatherTime = 0;
-    public Long totalTargetWeatherCount = (long) 0;
+    public int totalTargetWeatherCount = 0;
 
     WeatherValue(String city, String targetWeather, String currentWeather, List<String> pastWeatherList) {
         this.city = city;

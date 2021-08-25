@@ -78,27 +78,34 @@ public class TimerTaskCall extends TimerTask {
                 weatherValue.currentWeatherTime = 5;
                 weatherValue.pastWeatherList.add(currentWeather);
                 weatherValue.totalTargetWeatherTime += 5;
+
+                if (weatherValue.targetWeatherTimeList == null) {
+                    weatherValue.targetWeatherTimeList = new ArrayList<Integer>(Arrays.asList(weatherValue.currentWeatherTime));
+                } else {
+                    weatherValue.targetWeatherTimeList.add(weatherValue.currentWeatherTime);
+                }
             }
 
             // 前の天気も現在の天気も計測対象の天気の場合
             else if (weatherBefore.equals(targetWeather) && currentWeather.equals(targetWeather)) {
                 weatherValue.currentWeatherTime += 5;
                 weatherValue.totalTargetWeatherTime += 5;
+
+                if (weatherValue.targetWeatherTimeList == null) {
+                    weatherValue.targetWeatherTimeList = new ArrayList<Integer>(Arrays.asList(weatherValue.currentWeatherTime));
+                } else {
+                    weatherValue.targetWeatherTimeList.set(weatherValue.totalTargetWeatherCount-1, weatherValue.currentWeatherTime);
+                }
             }
 
             // 前の天気は計測対象の天気で、現在の天気は計測対象の天気以外の場合
             else if (weatherBefore.equals(targetWeather) && !(currentWeather.equals(targetWeather))) {
-                if (weatherValue.targetWeatherTimeList == null) {
-                    weatherValue.targetWeatherTimeList = new ArrayList<Integer>(Arrays.asList(weatherValue.currentWeatherTime));
-                } else {
-                    weatherValue.targetWeatherTimeList.add(weatherValue.currentWeatherTime);
-                }
                 weatherValue.currentWeatherTime = 5;
                 weatherValue.pastWeatherList.add(currentWeather);
             }
 
             Map<String, Long> counts = weatherValue.pastWeatherList.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-            weatherValue.totalTargetWeatherCount = counts.get(targetWeather) != null ? counts.get(targetWeather) : 0;
+            weatherValue.totalTargetWeatherCount = (int) (counts.get(targetWeather) != null ? counts.get(targetWeather) : 0);
 
             weatherValue.printData();
 
