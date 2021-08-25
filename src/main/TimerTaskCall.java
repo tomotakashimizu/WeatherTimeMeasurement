@@ -27,7 +27,6 @@ public class TimerTaskCall extends TimerTask {
     String targetWeather = "曇りがち";
     String initialWeather = openWeatherModel.weather.get(0).description;
     List<String> initialWeatherList = new ArrayList<String>(Arrays.asList(initialWeather));
-
     WeatherValue weatherValue = new WeatherValue(weatherCity, targetWeather, initialWeather, initialWeatherList);
 
     Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
@@ -71,32 +70,25 @@ public class TimerTaskCall extends TimerTask {
             }
             
             // 前の天気は計測対象の天気以外で、現在の天気は計測対象の天気の場合
-            else if (!(weatherBefore.equals(targetWeather)) && (currentWeather.equals(targetWeather))) {
+            else if (!(weatherBefore.equals(targetWeather)) && currentWeather.equals(targetWeather)) {
                 weatherValue.currentWeatherTime = 5;
                 weatherValue.pastWeatherList.add(currentWeather);
             }
 
             // 前の天気も現在の天気も計測対象の天気の場合
-            else if ((weatherBefore.equals(targetWeather)) && (currentWeather.equals(targetWeather))) {
+            else if (weatherBefore.equals(targetWeather) && currentWeather.equals(targetWeather)) {
                 weatherValue.currentWeatherTime += 5;
             }
 
             // 前の天気は計測対象の天気で、現在の天気は計測対象の天気以外の場合
-            else if ((weatherBefore.equals(targetWeather)) && !(currentWeather.equals(targetWeather))) {
+            else if (weatherBefore.equals(targetWeather) && !(currentWeather.equals(targetWeather))) {
                 if (weatherValue.targetWeatherTimeList == null) {
                     weatherValue.targetWeatherTimeList = new ArrayList<Integer>(Arrays.asList(weatherValue.currentWeatherTime));
                 } else {
                     weatherValue.targetWeatherTimeList.add(weatherValue.currentWeatherTime);
                 }
-
-                if (currentWeather.equals(weatherBefore)) {
-                    // 現在の天気が前の天気と同じ場合
-                    weatherValue.currentWeatherTime += 5;
-                } else {
-                    // 現在の天気が前の天気と異なる場合
-                    weatherValue.currentWeatherTime = 5;
-                    weatherValue.pastWeatherList.add(currentWeather);
-                }
+                weatherValue.currentWeatherTime = 5;
+                weatherValue.pastWeatherList.add(currentWeather);
             }
 
             weatherValue.printData();
