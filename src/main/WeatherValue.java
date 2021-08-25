@@ -12,6 +12,7 @@ public class WeatherValue {
     public List<String> pastWeatherList;
     public List<Integer> targetWeatherTimeList;
     public int totalTargetWeatherTime = 0;
+    public Long totalTargetWeatherCount = (long) 0;
 
     WeatherValue(String city, String targetWeather, String currentWeather, List<String> pastWeatherList) {
         this.city = city;
@@ -29,8 +30,9 @@ public class WeatherValue {
         System.out.println("現在の天気：" + this.currentWeather);
         System.out.println("現在の天気が継続している時間：" + this.currentWeatherTime);
         System.out.println("プログラムを回している間の天気のリスト：" + this.pastWeatherList);
-        System.out.println("過去の計測対象の天気の時間リスト：" + this.targetWeatherTimeList);
-        System.out.println("過去の計測対象の天気の合計時間：" + this.totalTargetWeatherTime);
+        System.out.println("計測対象の天気の時間リスト：" + this.targetWeatherTimeList);
+        System.out.println("計測対象の天気の合計時間：" + this.totalTargetWeatherTime);
+        System.out.println("計測対象の天気の合計：" + this.totalTargetWeatherCount);
         System.out.println("=== Weatherクラスのデータ 終了 ===\n");
     }
 

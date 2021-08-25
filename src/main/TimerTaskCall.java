@@ -5,7 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.TimerTask;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 
@@ -24,7 +27,7 @@ public class TimerTaskCall extends TimerTask {
     String weatherJson = openWeatherAPI.createJSON();
     OpenWeatherModel openWeatherModel = gson.fromJson(weatherJson, OpenWeatherModel.class);
     String weatherCity = openWeatherModel.name;
-    String targetWeather = "曇りがち";
+    String targetWeather = "晴れ";
     String initialWeather = openWeatherModel.weather.get(0).description;
     List<String> initialWeatherList = new ArrayList<String>(Arrays.asList(initialWeather));
     WeatherValue weatherValue = new WeatherValue(weatherCity, targetWeather, initialWeather, initialWeatherList);
@@ -93,6 +96,9 @@ public class TimerTaskCall extends TimerTask {
                 weatherValue.currentWeatherTime = 5;
                 weatherValue.pastWeatherList.add(currentWeather);
             }
+
+            Map<String, Long> counts = weatherValue.pastWeatherList.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+            weatherValue.totalTargetWeatherCount = counts.get(targetWeather) != null ? counts.get(targetWeather) : 0;
 
             weatherValue.printData();
 
