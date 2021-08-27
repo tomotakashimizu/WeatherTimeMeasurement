@@ -7,8 +7,8 @@ public class Main {
     public static void main(String[] args) {
 
         Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
-        // postgresTest.createTable("testtable6", "id integer, city varchar(100), time varchar(100), description varchar(100)");
-        postgresTest.selectValues("SELECT * from testtable6");
+        postgresTest.createTable("testtable7", "id integer, city varchar(100), time varchar(100), measuring_time integer, target_weather varchar(100), current_weather varchar(100), current_weather_time integer, total_target_weather_time integer, total_target_weather_count integer");
+        postgresTest.selectValues("SELECT * from testtable7");
 
         Timer time = new Timer();
         System.out.println("実行開始");

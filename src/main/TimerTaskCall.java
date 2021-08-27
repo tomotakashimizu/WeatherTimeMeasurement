@@ -109,6 +109,9 @@ public class TimerTaskCall extends TimerTask {
 
             weatherValue.printData();
 
+            String newValues = i + ", '" + weatherCity + "', '" + currentTime + "', " + weatherValue.measuringTime + ", '" + targetWeather+ "', '" + currentWeather + "', " + weatherValue.currentWeatherTime + ", " + weatherValue.totalTargetWeatherTime + ", " + weatherValue.totalTargetWeatherCount;
+            postgresTest.createValues("testtable7", newValues);
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
