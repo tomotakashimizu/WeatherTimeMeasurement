@@ -25,7 +25,7 @@ public class WeatherValue {
         System.out.println("\n=== Weatherクラスのデータ 開始 ===");
         System.out.println("都市：" + this.city);
         System.out.println("現在時刻：" + this.currentTime);
-        System.out.println("測定時間：" + this.measuringTime);
+        System.out.println("計測時間：" + this.measuringTime);
         System.out.println("計測対象の天気：" + this.targetWeather);
         System.out.println("現在の天気：" + this.currentWeather);
         System.out.println("現在の天気が継続している時間：" + this.currentWeatherTime);
