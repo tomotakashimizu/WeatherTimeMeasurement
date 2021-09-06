@@ -1,5 +1,5 @@
-package main;
+package model.postgres;
 
 public class WeatherTable {
-    
+
 }
