@@ -1,4 +1,4 @@
-package main;
+package model.weather;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class WeatherValue {
     public int totalTargetWeatherTime = 0;
     public int totalTargetWeatherCount = 0;
 
-    WeatherValue(String city, String targetWeather, String currentWeather, List<String> pastWeatherList) {
+    public WeatherValue(String city, String targetWeather, String currentWeather, List<String> pastWeatherList) {
         this.city = city;
         this.targetWeather = targetWeather;
         this.currentWeather = currentWeather;
