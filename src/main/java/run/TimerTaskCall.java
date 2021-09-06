@@ -1,4 +1,4 @@
-package main;
+package run;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,17 +12,21 @@ import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 
+import model.api.APIKey;
+import model.api.WebAPI;
 import model.gson.OpenWeatherModel;
+import model.postgres.Postgres;
+import model.weather.WeatherValue;
 
 public class TimerTaskCall extends TimerTask {
 
     DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
     WebAPI openWeatherAPI = new WebAPI("https://api.openweathermap.org/data/2.5/weather",
-                                            "?q=tokyo&units=metric",
-                                            APIKey.getMyAPIKey(),
-                                            "&lang=ja");
-    
+            "?q=tokyo&units=metric",
+            APIKey.getMyAPIKey(),
+            "&lang=ja");
+
     Gson gson = new Gson();
     String weatherJson = openWeatherAPI.createJSON();
     OpenWeatherModel openWeatherModel = gson.fromJson(weatherJson, OpenWeatherModel.class);
@@ -38,7 +42,7 @@ public class TimerTaskCall extends TimerTask {
     @Override
     public void run() {
         try {
-            
+
             String weatherJson = openWeatherAPI.createJSON();
             System.out.println("\n=== weatherJson ===\n" + weatherJson);
 
@@ -72,7 +76,7 @@ public class TimerTaskCall extends TimerTask {
                     weatherValue.pastWeatherList.add(currentWeather);
                 }
             }
-            
+
             // 前の天気は計測対象の天気以外で、現在の天気は計測対象の天気の場合
             else if (!(weatherBefore.equals(targetWeather)) && currentWeather.equals(targetWeather)) {
                 weatherValue.currentWeatherTime = 5;
@@ -80,7 +84,8 @@ public class TimerTaskCall extends TimerTask {
                 weatherValue.totalTargetWeatherTime += 5;
 
                 if (weatherValue.targetWeatherTimeList == null) {
-                    weatherValue.targetWeatherTimeList = new ArrayList<Integer>(Arrays.asList(weatherValue.currentWeatherTime));
+                    weatherValue.targetWeatherTimeList = new ArrayList<Integer>(
+                            Arrays.asList(weatherValue.currentWeatherTime));
                 } else {
                     weatherValue.targetWeatherTimeList.add(weatherValue.currentWeatherTime);
                 }
@@ -92,9 +97,11 @@ public class TimerTaskCall extends TimerTask {
                 weatherValue.totalTargetWeatherTime += 5;
 
                 if (weatherValue.targetWeatherTimeList == null) {
-                    weatherValue.targetWeatherTimeList = new ArrayList<Integer>(Arrays.asList(weatherValue.currentWeatherTime));
+                    weatherValue.targetWeatherTimeList = new ArrayList<Integer>(
+                            Arrays.asList(weatherValue.currentWeatherTime));
                 } else {
-                    weatherValue.targetWeatherTimeList.set(weatherValue.totalTargetWeatherCount-1, weatherValue.currentWeatherTime);
+                    weatherValue.targetWeatherTimeList.set(weatherValue.totalTargetWeatherCount - 1,
+                            weatherValue.currentWeatherTime);
                 }
             }
 
@@ -104,12 +111,16 @@ public class TimerTaskCall extends TimerTask {
                 weatherValue.pastWeatherList.add(currentWeather);
             }
 
-            Map<String, Long> counts = weatherValue.pastWeatherList.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-            weatherValue.totalTargetWeatherCount = (int) (counts.get(targetWeather) != null ? counts.get(targetWeather) : 0);
+            Map<String, Long> counts = weatherValue.pastWeatherList.stream()
+                    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+            weatherValue.totalTargetWeatherCount = (int) (counts.get(targetWeather) != null ? counts.get(targetWeather)
+                    : 0);
 
             weatherValue.printData();
 
-            String newValues = i + ", '" + weatherCity + "', '" + currentTime + "', " + weatherValue.measuringTime + ", '" + targetWeather+ "', '" + currentWeather + "', " + weatherValue.currentWeatherTime + ", " + weatherValue.totalTargetWeatherTime + ", " + weatherValue.totalTargetWeatherCount;
+            String newValues = i + ", '" + weatherCity + "', '" + currentTime + "', " + weatherValue.measuringTime
+                    + ", '" + targetWeather + "', '" + currentWeather + "', " + weatherValue.currentWeatherTime + ", "
+                    + weatherValue.totalTargetWeatherTime + ", " + weatherValue.totalTargetWeatherCount;
             postgresTest.createValues("testtable7", newValues);
 
         } catch (Exception ex) {

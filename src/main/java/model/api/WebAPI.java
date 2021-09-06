@@ -1,4 +1,4 @@
-package main;
+package model.api;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -13,7 +13,7 @@ public class WebAPI {
     private String lang = "";
     private String json;
 
-    WebAPI(String stringUrl, String param, String apiKey, String lang) {
+    public WebAPI(String stringUrl, String param, String apiKey, String lang) {
         this.stringUrl = stringUrl;
         this.param = param;
         this.apiKey = apiKey;
