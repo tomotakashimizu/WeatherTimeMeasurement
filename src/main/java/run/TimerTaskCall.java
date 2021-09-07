@@ -10,12 +10,20 @@ import java.util.TimerTask;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+
+import org.apache.http.HttpHost;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 
 import model.api.APIKey;
 import model.api.WebAPI;
 import model.gson.OpenWeatherModel;
-import model.postgres.Postgres;
 import model.weather.WeatherValue;
 
 public class TimerTaskCall extends TimerTask {
@@ -36,8 +44,14 @@ public class TimerTaskCall extends TimerTask {
     List<String> initialWeatherList = new ArrayList<String>(Arrays.asList(initialWeather));
     WeatherValue weatherValue = new WeatherValue(weatherCity, targetWeather, initialWeather, initialWeatherList);
 
-    Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
-    int i = 0;
+    // Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
+    int id = 0;
+    int timeInterval = 5;
+
+    // Elasticsearch に接続
+    RestHighLevelClient client = new RestHighLevelClient(
+            RestClient.builder(new HttpHost("localhost", 9200, "http")));
+    IndexRequest indexRequest = new IndexRequest("weatherindex");
 
     @Override
     public void run() {
@@ -54,13 +68,14 @@ public class TimerTaskCall extends TimerTask {
             String currentTime = LocalDateTime.now().format(dateTimeFormat);
             System.out.println("\n=== 現在時刻 ===\n" + currentTime + "\n");
 
-            i += 1;
-            String values = i + ", '" + weatherCity + "', '" + currentTime + "', '" + currentWeather + "'";
-            postgresTest.createValues("testtable6", values);
+            id += 1;
+            // String values = id + ", '" + weatherCity + "', '" + currentTime + "', '" +
+            // currentWeather + "'";
+            // postgresTest.createValues("testtable6", values);
 
             weatherValue.currentTime = currentTime;
             weatherValue.currentWeather = currentWeather;
-            weatherValue.measuringTime += 5;
+            weatherValue.measuringTime += timeInterval;
 
             // 現在の天気になる前の天気(weatherDescriptionListの最後の要素を取得)
             String weatherBefore = weatherValue.pastWeatherList.get(weatherValue.pastWeatherList.size() - 1);
@@ -69,19 +84,19 @@ public class TimerTaskCall extends TimerTask {
             if (!(weatherBefore.equals(targetWeather)) && !(currentWeather.equals(targetWeather))) {
                 if (currentWeather.equals(weatherBefore)) {
                     // 現在の天気が前の天気と同じ場合
-                    weatherValue.currentWeatherTime += 5;
+                    weatherValue.currentWeatherTime += timeInterval;
                 } else {
                     // 現在の天気が前の天気と異なる場合
-                    weatherValue.currentWeatherTime = 5;
+                    weatherValue.currentWeatherTime = timeInterval;
                     weatherValue.pastWeatherList.add(currentWeather);
                 }
             }
 
             // 前の天気は計測対象の天気以外で、現在の天気は計測対象の天気の場合
             else if (!(weatherBefore.equals(targetWeather)) && currentWeather.equals(targetWeather)) {
-                weatherValue.currentWeatherTime = 5;
+                weatherValue.currentWeatherTime = timeInterval;
                 weatherValue.pastWeatherList.add(currentWeather);
-                weatherValue.totalTargetWeatherTime += 5;
+                weatherValue.totalTargetWeatherTime += timeInterval;
 
                 if (weatherValue.targetWeatherTimeList == null) {
                     weatherValue.targetWeatherTimeList = new ArrayList<Integer>(
@@ -93,8 +108,8 @@ public class TimerTaskCall extends TimerTask {
 
             // 前の天気も現在の天気も計測対象の天気の場合
             else if (weatherBefore.equals(targetWeather) && currentWeather.equals(targetWeather)) {
-                weatherValue.currentWeatherTime += 5;
-                weatherValue.totalTargetWeatherTime += 5;
+                weatherValue.currentWeatherTime += timeInterval;
+                weatherValue.totalTargetWeatherTime += timeInterval;
 
                 if (weatherValue.targetWeatherTimeList == null) {
                     weatherValue.targetWeatherTimeList = new ArrayList<Integer>(
@@ -107,7 +122,7 @@ public class TimerTaskCall extends TimerTask {
 
             // 前の天気は計測対象の天気で、現在の天気は計測対象の天気以外の場合
             else if (weatherBefore.equals(targetWeather) && !(currentWeather.equals(targetWeather))) {
-                weatherValue.currentWeatherTime = 5;
+                weatherValue.currentWeatherTime = timeInterval;
                 weatherValue.pastWeatherList.add(currentWeather);
             }
 
@@ -118,10 +133,22 @@ public class TimerTaskCall extends TimerTask {
 
             weatherValue.printData();
 
-            String newValues = i + ", '" + weatherCity + "', '" + currentTime + "', " + weatherValue.measuringTime
-                    + ", '" + targetWeather + "', '" + currentWeather + "', " + weatherValue.currentWeatherTime + ", "
-                    + weatherValue.totalTargetWeatherTime + ", " + weatherValue.totalTargetWeatherCount;
-            postgresTest.createValues("testtable7", newValues);
+            // String newValues = id + ", '" + weatherCity + "', '" + currentTime + "', " +
+            // weatherValue.measuringTime
+            // + ", '" + targetWeather + "', '" + currentWeather + "', " +
+            // weatherValue.currentWeatherTime + ", "
+            // + weatherValue.totalTargetWeatherTime + ", " +
+            // weatherValue.totalTargetWeatherCount;
+            // postgresTest.createValues("testtable7", newValues);
+
+            // POJO を JSON 形式にして データを Elasticsearch に送る
+            indexRequest.id("" + id);
+            indexRequest.source(new ObjectMapper().writeValueAsString(weatherValue), XContentType.JSON);
+            System.out.println("JSONデータ" + new ObjectMapper().writeValueAsString(weatherValue));
+            IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
+            // 正常に処理されたか確認
+            System.out.println("response id: " + indexResponse.getId());
+            System.out.println("response name: " + indexResponse.getResult().name());
 
         } catch (Exception ex) {
             ex.printStackTrace();
