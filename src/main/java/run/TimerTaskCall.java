@@ -10,12 +10,20 @@ import java.util.TimerTask;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+
+import org.apache.http.HttpHost;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 
 import model.api.APIKey;
 import model.api.WebAPI;
 import model.gson.OpenWeatherModel;
-import model.postgres.Postgres;
 import model.weather.WeatherValue;
 
 public class TimerTaskCall extends TimerTask {
@@ -36,9 +44,14 @@ public class TimerTaskCall extends TimerTask {
     List<String> initialWeatherList = new ArrayList<String>(Arrays.asList(initialWeather));
     WeatherValue weatherValue = new WeatherValue(weatherCity, targetWeather, initialWeather, initialWeatherList);
 
-    Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
+    // Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
     int id = 0;
     int timeInterval = 5;
+
+    // Elasticsearch に接続
+    RestHighLevelClient client = new RestHighLevelClient(
+            RestClient.builder(new HttpHost("localhost", 9200, "http")));
+    IndexRequest indexRequest = new IndexRequest("weatherindex");
 
     @Override
     public void run() {
@@ -56,8 +69,9 @@ public class TimerTaskCall extends TimerTask {
             System.out.println("\n=== 現在時刻 ===\n" + currentTime + "\n");
 
             id += 1;
-            String values = id + ", '" + weatherCity + "', '" + currentTime + "', '" + currentWeather + "'";
-            postgresTest.createValues("testtable6", values);
+            // String values = id + ", '" + weatherCity + "', '" + currentTime + "', '" +
+            // currentWeather + "'";
+            // postgresTest.createValues("testtable6", values);
 
             weatherValue.currentTime = currentTime;
             weatherValue.currentWeather = currentWeather;
@@ -119,10 +133,22 @@ public class TimerTaskCall extends TimerTask {
 
             weatherValue.printData();
 
-            String newValues = id + ", '" + weatherCity + "', '" + currentTime + "', " + weatherValue.measuringTime
-                    + ", '" + targetWeather + "', '" + currentWeather + "', " + weatherValue.currentWeatherTime + ", "
-                    + weatherValue.totalTargetWeatherTime + ", " + weatherValue.totalTargetWeatherCount;
-            postgresTest.createValues("testtable7", newValues);
+            // String newValues = id + ", '" + weatherCity + "', '" + currentTime + "', " +
+            // weatherValue.measuringTime
+            // + ", '" + targetWeather + "', '" + currentWeather + "', " +
+            // weatherValue.currentWeatherTime + ", "
+            // + weatherValue.totalTargetWeatherTime + ", " +
+            // weatherValue.totalTargetWeatherCount;
+            // postgresTest.createValues("testtable7", newValues);
+
+            // POJO を JSON 形式にして データを Elasticsearch に送る
+            indexRequest.id("" + id);
+            indexRequest.source(new ObjectMapper().writeValueAsString(weatherValue), XContentType.JSON);
+            System.out.println("JSONデータ" + new ObjectMapper().writeValueAsString(weatherValue));
+            IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
+            // 正常に処理されたか確認
+            System.out.println("response id: " + indexResponse.getId());
+            System.out.println("response name: " + indexResponse.getResult().name());
 
         } catch (Exception ex) {
             ex.printStackTrace();
