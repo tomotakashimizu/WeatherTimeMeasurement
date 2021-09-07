@@ -38,6 +38,7 @@ public class TimerTaskCall extends TimerTask {
 
     Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
     int id = 0;
+    int timeInterval = 5;
 
     @Override
     public void run() {
@@ -60,7 +61,7 @@ public class TimerTaskCall extends TimerTask {
 
             weatherValue.currentTime = currentTime;
             weatherValue.currentWeather = currentWeather;
-            weatherValue.measuringTime += 5;
+            weatherValue.measuringTime += timeInterval;
 
             // 現在の天気になる前の天気(weatherDescriptionListの最後の要素を取得)
             String weatherBefore = weatherValue.pastWeatherList.get(weatherValue.pastWeatherList.size() - 1);
@@ -69,19 +70,19 @@ public class TimerTaskCall extends TimerTask {
             if (!(weatherBefore.equals(targetWeather)) && !(currentWeather.equals(targetWeather))) {
                 if (currentWeather.equals(weatherBefore)) {
                     // 現在の天気が前の天気と同じ場合
-                    weatherValue.currentWeatherTime += 5;
+                    weatherValue.currentWeatherTime += timeInterval;
                 } else {
                     // 現在の天気が前の天気と異なる場合
-                    weatherValue.currentWeatherTime = 5;
+                    weatherValue.currentWeatherTime = timeInterval;
                     weatherValue.pastWeatherList.add(currentWeather);
                 }
             }
 
             // 前の天気は計測対象の天気以外で、現在の天気は計測対象の天気の場合
             else if (!(weatherBefore.equals(targetWeather)) && currentWeather.equals(targetWeather)) {
-                weatherValue.currentWeatherTime = 5;
+                weatherValue.currentWeatherTime = timeInterval;
                 weatherValue.pastWeatherList.add(currentWeather);
-                weatherValue.totalTargetWeatherTime += 5;
+                weatherValue.totalTargetWeatherTime += timeInterval;
 
                 if (weatherValue.targetWeatherTimeList == null) {
                     weatherValue.targetWeatherTimeList = new ArrayList<Integer>(
@@ -93,8 +94,8 @@ public class TimerTaskCall extends TimerTask {
 
             // 前の天気も現在の天気も計測対象の天気の場合
             else if (weatherBefore.equals(targetWeather) && currentWeather.equals(targetWeather)) {
-                weatherValue.currentWeatherTime += 5;
-                weatherValue.totalTargetWeatherTime += 5;
+                weatherValue.currentWeatherTime += timeInterval;
+                weatherValue.totalTargetWeatherTime += timeInterval;
 
                 if (weatherValue.targetWeatherTimeList == null) {
                     weatherValue.targetWeatherTimeList = new ArrayList<Integer>(
@@ -107,7 +108,7 @@ public class TimerTaskCall extends TimerTask {
 
             // 前の天気は計測対象の天気で、現在の天気は計測対象の天気以外の場合
             else if (weatherBefore.equals(targetWeather) && !(currentWeather.equals(targetWeather))) {
-                weatherValue.currentWeatherTime = 5;
+                weatherValue.currentWeatherTime = timeInterval;
                 weatherValue.pastWeatherList.add(currentWeather);
             }
 
