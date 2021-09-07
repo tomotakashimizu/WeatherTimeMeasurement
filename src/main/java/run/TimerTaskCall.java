@@ -37,7 +37,7 @@ public class TimerTaskCall extends TimerTask {
     WeatherValue weatherValue = new WeatherValue(weatherCity, targetWeather, initialWeather, initialWeatherList);
 
     Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
-    int i = 0;
+    int id = 0;
 
     @Override
     public void run() {
@@ -54,8 +54,8 @@ public class TimerTaskCall extends TimerTask {
             String currentTime = LocalDateTime.now().format(dateTimeFormat);
             System.out.println("\n=== 現在時刻 ===\n" + currentTime + "\n");
 
-            i += 1;
-            String values = i + ", '" + weatherCity + "', '" + currentTime + "', '" + currentWeather + "'";
+            id += 1;
+            String values = id + ", '" + weatherCity + "', '" + currentTime + "', '" + currentWeather + "'";
             postgresTest.createValues("testtable6", values);
 
             weatherValue.currentTime = currentTime;
@@ -118,7 +118,7 @@ public class TimerTaskCall extends TimerTask {
 
             weatherValue.printData();
 
-            String newValues = i + ", '" + weatherCity + "', '" + currentTime + "', " + weatherValue.measuringTime
+            String newValues = id + ", '" + weatherCity + "', '" + currentTime + "', " + weatherValue.measuringTime
                     + ", '" + targetWeather + "', '" + currentWeather + "', " + weatherValue.currentWeatherTime + ", "
                     + weatherValue.totalTargetWeatherTime + ", " + weatherValue.totalTargetWeatherCount;
             postgresTest.createValues("testtable7", newValues);
