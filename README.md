@@ -19,3 +19,41 @@ WeatherTimeMeasurement は OpenWeatherMap API を用いて計測したい天気�
 ##### 起動
 
 `$ kibana`
+
+### PostgreSQL
+
+##### 起動
+
+`$ brew services start postgresql`
+
+##### ユーザアカウントを追加
+
+`$ createuser -P $account_name`
+
+##### データベース作成
+
+`$ createdb $db_name -O $account_name`
+
+##### データベース確認
+
+`$ psql -l`
+
+##### データベースへ接続
+
+```
+$ psql -U $account_name $db_name
+
+$db_name=>
+```
+
+##### テーブルを作成し、確認
+
+```
+CREATE TABLE testtable (id integer, name varchar(100));
+insert into testtable(id, name) values(1, 'aa');
+select * from testtable;
+```
+
+##### 停止
+
+`brew services stop postgresql`
