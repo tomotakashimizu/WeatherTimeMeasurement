@@ -24,6 +24,7 @@ import org.elasticsearch.common.xcontent.XContentType;
 import model.api.APIKey;
 import model.api.WebAPI;
 import model.gson.OpenWeatherModel;
+import model.postgres.Postgres;
 import model.weather.WeatherValue;
 
 public class TimerTaskCall extends TimerTask {
@@ -44,9 +45,11 @@ public class TimerTaskCall extends TimerTask {
     List<String> initialWeatherList = new ArrayList<String>(Arrays.asList(initialWeather));
     WeatherValue weatherValue = new WeatherValue(weatherCity, targetWeather, initialWeather, initialWeatherList);
 
-    // Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
     int id = 0;
     int timeInterval = 5;
+
+    // Postgres クラスをインスタンス化
+    Postgres postgresTest = new Postgres("testdb", "testuser", "testpass");
 
     // Elasticsearch に接続
     RestHighLevelClient client = new RestHighLevelClient(
@@ -69,9 +72,6 @@ public class TimerTaskCall extends TimerTask {
             System.out.println("\n=== 現在時刻 ===\n" + currentTime + "\n");
 
             id += 1;
-            // String values = id + ", '" + weatherCity + "', '" + currentTime + "', '" +
-            // currentWeather + "'";
-            // postgresTest.createValues("testtable6", values);
 
             weatherValue.currentTime = currentTime;
             weatherValue.currentWeather = currentWeather;
@@ -133,13 +133,12 @@ public class TimerTaskCall extends TimerTask {
 
             weatherValue.printData();
 
-            // String newValues = id + ", '" + weatherCity + "', '" + currentTime + "', " +
-            // weatherValue.measuringTime
-            // + ", '" + targetWeather + "', '" + currentWeather + "', " +
-            // weatherValue.currentWeatherTime + ", "
-            // + weatherValue.totalTargetWeatherTime + ", " +
-            // weatherValue.totalTargetWeatherCount;
-            // postgresTest.createValues("testtable7", newValues);
+            // Postgres にデータを保存
+            String newValues = id + ", '" + weatherCity + "', '" + currentTime + "', " +
+                    weatherValue.measuringTime + ", '" + targetWeather + "', '" +
+                    currentWeather + "', " + weatherValue.currentWeatherTime + ", " +
+                    weatherValue.totalTargetWeatherTime + ", " + weatherValue.totalTargetWeatherCount;
+            postgresTest.createValues("testtable7", newValues);
 
             // POJO を JSON 形式にして データを Elasticsearch に送る
             indexRequest.id("" + id);
