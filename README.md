@@ -49,11 +49,11 @@ $db_name=>
 ##### テーブルを作成し、確認
 
 ```
-CREATE TABLE testtable (id integer, name varchar(100));
-insert into testtable(id, name) values(1, 'aa');
-select * from testtable;
+$db_name=> CREATE TABLE testtable (id integer, name varchar(100));
+$db_name=> insert into testtable(id, name) values(1, 'aa');
+$db_name=> select * from testtable;
 ```
 
 ##### 停止
 
-`brew services stop postgresql`
+`$ brew services stop postgresql`
