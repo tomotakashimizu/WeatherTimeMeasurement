@@ -1,6 +1,6 @@
 # WeatherTimeMeasurement
 
-WeatherTimeMeasurement は OpenWeatherMap API を用いて計測したい天気の時間を記録することができます。それらの記録は Elasticsearch, PostgreSQL に保存されます。また Elasticsearch に保存されたデータは Kibana で可視化することでわかりやすく表示できます。
+WeatherTimeMeasurement は [OpenWeatherMap API](https://openweathermap.org/api) を用いて計測したい天気の時間を記録することができます。それらの記録は [Elasticsearch](https://www.elastic.co/products/elasticsearch), [PostgreSQL](https://www.postgresql.org) に保存されます。また Elasticsearch に保存されたデータは [Kibana](https://www.elastic.co/products/kibana) で可視化することでわかりやすく表示できます。
 
 ## Elasticsearch setup
 
