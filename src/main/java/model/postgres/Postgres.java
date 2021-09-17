@@ -28,23 +28,12 @@ public class Postgres {
         try {
             // PostgreSQLへ接続
             conn = DriverManager.getConnection(this.url, this.userName, this.password);
-
             // 自動コミットOFF
             conn.setAutoCommit(false);
 
-            // SELECT文の実行
             stmt = conn.createStatement();
-            String sql = "SELECT 1";
-            rset = stmt.executeQuery(sql);
-
-            // SELECT結果の受け取り
-            while (rset.next()) {
-                String col = rset.getString(1);
-                System.out.println(col);
-            }
-
             // INSERT文の実行
-            sql = "INSERT INTO " + tableName + " VALUES (" + values + ")";
+            String sql = "INSERT INTO " + tableName + " VALUES (" + values + ")";
             stmt.executeUpdate(sql);
             conn.commit();
         } catch (SQLException e) {
@@ -69,12 +58,10 @@ public class Postgres {
         try {
             // PostgreSQLへ接続
             conn = DriverManager.getConnection(this.url, this.userName, this.password);
-
             // 自動コミットOFF
             conn.setAutoCommit(false);
 
             stmt = conn.createStatement();
-
             // CREATE文の実行
             String sql = "CREATE TABLE " + tableName + " (" + valuesType + ")";
             stmt.executeUpdate(sql);
@@ -101,7 +88,6 @@ public class Postgres {
         try {
             // PostgreSQLへ接続
             conn = DriverManager.getConnection(this.url, this.userName, this.password);
-
             // 自動コミットOFF
             conn.setAutoCommit(false);
 
