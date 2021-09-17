@@ -27,6 +27,9 @@ public class ElasticCreateIndex {
 
         // index が作成されたか確認
         System.out.println("response id: " + createIndexResponse.index());
+
+        // クライアントを閉じる
+        client.close();
     }
 
 }
