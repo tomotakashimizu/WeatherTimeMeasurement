@@ -74,7 +74,7 @@ public class TimerTaskCall extends TimerTask {
 
             id += 1;
 
-            weatherValue.currentTime = currentTime;
+            weatherValue.timestamp = currentTime;
             weatherValue.currentWeather = currentWeather;
             weatherValue.measuringTime += timeInterval;
 
