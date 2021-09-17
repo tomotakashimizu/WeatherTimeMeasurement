@@ -4,7 +4,7 @@ import java.util.List;
 
 public class WeatherValue {
     public String city;
-    public String currentTime;
+    public String timestamp;
     public int measuringTime = 0;
     public String targetWeather;
     public String currentWeather;
@@ -24,7 +24,7 @@ public class WeatherValue {
     public void printData() {
         System.out.println("\n=== Weatherクラスのデータ 開始 ===");
         System.out.println("都市：" + this.city);
-        System.out.println("現在時刻：" + this.currentTime);
+        System.out.println("現在時刻：" + this.timestamp);
         System.out.println("計測時間：" + this.measuringTime);
         System.out.println("計測対象の天気：" + this.targetWeather);
         System.out.println("現在の天気：" + this.currentWeather);
