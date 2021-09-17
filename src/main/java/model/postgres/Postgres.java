@@ -97,7 +97,7 @@ public class Postgres {
 
             // SELECT結果の受け取り
             while (rset.next()) {
-                String col = rset.getString("description");
+                String col = rset.getString("current_weather");
                 System.out.println(col);
             }
         } catch (SQLException e) {
