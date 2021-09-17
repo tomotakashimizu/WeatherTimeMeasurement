@@ -18,7 +18,7 @@ public class ElasticCreateIndex {
                 RestClient.builder(new HttpHost("localhost", 9200, "http")));
 
         // Elasticsearch に新しい index を作成
-        CreateIndexRequest request = new CreateIndexRequest("weatherindex");
+        CreateIndexRequest request = new CreateIndexRequest("weatherjstindex");
         request.settings(Settings.builder()
                 .put("index.number_of_shards", 1)
                 .put("index.number_of_replicas", 2));

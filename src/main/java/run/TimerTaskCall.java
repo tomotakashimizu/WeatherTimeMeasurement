@@ -55,7 +55,7 @@ public class TimerTaskCall extends TimerTask {
     // Elasticsearch に接続
     RestHighLevelClient client = new RestHighLevelClient(
             RestClient.builder(new HttpHost("localhost", 9200, "http")));
-    IndexRequest indexRequest = new IndexRequest("weatherindex");
+    IndexRequest indexRequest = new IndexRequest("weatherjstindex");
 
     @Override
     public void run() {
