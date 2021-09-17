@@ -1,6 +1,6 @@
 package run;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +29,8 @@ import model.weather.WeatherValue;
 
 public class TimerTaskCall extends TimerTask {
 
-    DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+    // 日付/時間をオフセット付きで書式設定または解析するISO日付/時間フォーマッタ(「2011-12-03T10:15:30+01:00」など)
+    DateTimeFormatter dateTimeFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     WebAPI openWeatherAPI = new WebAPI("https://api.openweathermap.org/data/2.5/weather",
             "?q=tokyo&units=metric",
@@ -68,7 +69,7 @@ public class TimerTaskCall extends TimerTask {
             System.out.println("\n=== weatherDescription ===\n" + currentWeather);
 
             // 現在日時情報を指定フォーマットの文字列で取得
-            String currentTime = LocalDateTime.now().format(dateTimeFormat);
+            String currentTime = ZonedDateTime.now().format(dateTimeFormat);
             System.out.println("\n=== 現在時刻 ===\n" + currentTime + "\n");
 
             id += 1;
